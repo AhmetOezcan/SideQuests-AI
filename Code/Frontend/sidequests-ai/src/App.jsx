@@ -11,40 +11,36 @@ function App() {
   const [currentPage, setCurrentPage] = useState("intro");
   const [userAnswers, setUserAnswers] = useState(null);
   const [tasks, setTasks] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   function goToQuestions() {
     setCurrentPage("questions");
   }
 
-  function handleGenerate(data) {
+  async function handleGenerate(data) {
     setUserAnswers(data);
+    setLoading(true);
 
-    const demoTasks = [
-      {
-        id: 1,
-        title: "Understand the basics of your topic with an AI or tutorial of your choice.",
-        done: false,
-      },
-      {
-        id: 2,
-        title: "Summarize what you learned in your own words.",
-        done: false,
-      },
-      {
-        id: 3,
-        title: "Do a small practical exercise related to your goal.",
-        done: false,
-      },
-      {
-        id: 4,
-        title: "Review what was difficult and repeat the weak part once more.",
-        done: false,
-      },
-    ];
+    try {
+      const response = await fetch("http://127.0.0.1:8000/generate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
 
-    setTasks(demoTasks);
-    setCurrentPage("quests");
+      const result = await response.json();
+
+      setTasks(result.tasks);
+      setCurrentPage("quests");
+    } catch (error) {
+      console.error("Error while generating tasks:", error);
+    } finally {
+      setLoading(false);
+    }
   }
+
 
   function handleToggleTask(taskId) {
     const updatedTasks = tasks.map((task) =>
@@ -62,7 +58,16 @@ function App() {
         <QuestionsPage onGenerate={handleGenerate} />
       )}
 
-      {currentPage === "quests" && (
+      {loading && (
+        <main>
+          <section>
+            <h1>Generating your quests...</h1>
+            <p>Please wait a moment.</p>
+          </section>
+        </main>
+      )}
+
+      {currentPage === "quests" && !loading && (
         <QuestPage
           userAnswers={userAnswers}
           tasks={tasks}
