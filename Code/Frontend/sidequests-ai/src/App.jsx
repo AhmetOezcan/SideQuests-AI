@@ -3,9 +3,9 @@ import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
 import heroImg from './assets/hero.png'
 import './App.css'
-import IntroPage from './ introPage'
-import QuestionsPage from './questionPage'
-import QuestPage from './questPage'
+import IntroPage from './IntroPage'
+import QuestionsPage from './QuestionPage'
+import QuestPage from './QuestPage'
 
 function App() {
   const [currentPage, setCurrentPage] = useState("intro");
@@ -22,7 +22,7 @@ function App() {
     setLoading(true);
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/generate", {
+      const response = await fetch("http://localhost:8000/generate", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
