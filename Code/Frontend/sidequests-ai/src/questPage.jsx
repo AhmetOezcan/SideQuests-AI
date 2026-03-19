@@ -1,6 +1,10 @@
-function QuestPage({ userAnswers, tasks, onToggleTask }) {
+function QuestPage({ userAnswers, tasks = [], onToggleTask }) {
+    if (!userAnswers) {
+      return null;
+    }
+
     const completedTasks = tasks.filter((task) => task.done).length;
-    const progress = Math.round((completedTasks / tasks.length) * 100);
+    const progress = tasks.length ? Math.round((completedTasks / tasks.length) * 100) : 0;
   
     return (
       <main>

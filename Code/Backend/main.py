@@ -10,7 +10,10 @@ client = OpenAI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=[
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -24,61 +27,94 @@ class GoalRequest(BaseModel):
     learningStyle: str
 
 
+@app.get("/")
+def read_root():
+    return {"message": "SideQuests backend is running"}
+
+
 @app.post("/generate")
 def generate_goal_map(data: GoalRequest):
-
     prompt = f"""
-    The user has this goal:
-    {data.goal}
+You are an expert learning planner.
 
-    Desired outcome:
-    {data.outcome}
+The user has this goal:
+{data.goal}
 
-    Experience level:
-    {data.experience}
+Desired outcome:
+{data.outcome}
 
-    Learning style:
-    {data.learningStyle}
+Experience level:
+{data.experience}
 
-    Create a step-by-step plan.
+Learning style:
+{data.learningStyle}
 
-    Rules:
-    - Create between 4 and 8 steps
-    - Each step must be clear and actionable
-    - Keep steps simple and practical
-    - Adapt to the experience level
-    - Adapt to the learning style
+Create a step-by-step plan.
 
-    Return ONLY valid JSON in this format:
+Rules:
+- Create between 4 and 8 steps
+- Each step must be short and actionable
+- Use simple language
+- Adapt to the experience level
+- Adapt to the learning style
+- Return ONLY valid JSON
 
-    {{
-      "tasks": [
-        {{"title": "Step 1 description"}},
-        {{"title": "Step 2 description"}}
-      ]
-    }}
-    """
-
-    response = client.responses.create(
-        model="gpt-4.1-mini",
-        input=prompt
-    )
-
-    content = response.output_text
+Example format:
+{{
+  "tasks": [
+    {{"title": "Learn basic Python syntax"}},
+    {{"title": "Write your first small Python program"}}
+  ]
+}}
+"""
 
     try:
+        response = client.responses.create(
+            model="gpt-4.1-mini",
+            input=prompt
+        )
+
+        content = response.output_text
+        print("MODEL OUTPUT:")
+        print(content)
+
         parsed = json.loads(content)
 
         tasks = []
-        for i, t in enumerate(parsed["tasks"]):
+        for i, task in enumerate(parsed["tasks"]):
             tasks.append({
                 "id": i + 1,
-                "title": t["title"],
+                "title": task["title"],
                 "done": False
             })
 
         return {"tasks": tasks}
 
     except Exception as e:
-        print("ERROR:", e)
-        return {"tasks": []}
+        print("ERROR IN /generate:")
+        print(e)
+
+        fallback_tasks = [
+            {
+                "id": 1,
+                "title": f"Learn the basics of {data.goal} with a resource or AI tool of your choice.",
+                "done": False
+            },
+            {
+                "id": 2,
+                "title": f"Define clearly what '{data.outcome}' means for your goal.",
+                "done": False
+            },
+            {
+                "id": 3,
+                "title": f"Choose a first practice task suitable for a {data.experience} level.",
+                "done": False
+            },
+            {
+                "id": 4,
+                "title": f"Continue using a {data.learningStyle} learning style.",
+                "done": False
+            }
+        ]
+
+        return {"tasks": fallback_tasks, "source": "fallback"}

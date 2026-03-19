@@ -17,11 +17,15 @@ function App() {
     setCurrentPage("questions");
   }
 
-  async function handleGenerate(data) {
+    async function handleGenerate(data) {
     setUserAnswers(data);
     setLoading(true);
+    
+    console.log("🚀 handleGenerate called with:", data);
 
     try {
+      console.log("📡 Sending request to http://localhost:8000/generate");
+      
       const response = await fetch("http://localhost:8000/generate", {
         method: "POST",
         headers: {
@@ -30,17 +34,31 @@ function App() {
         body: JSON.stringify(data),
       });
 
-      const result = await response.json();
+      console.log("📥 Response status:", response.status);
+      console.log("📥 Response OK?:", response.ok);
 
-      setTasks(result.tasks);
+      const result = await response.json();
+      console.log("📥 Response body:", result);
+
+      const tasks = Array.isArray(result?.tasks) ? result.tasks : [];
+      console.log("✅ Tasks extracted:", tasks);
+      
+      if (!Array.isArray(result?.tasks)) {
+        console.warn("⚠️ Unexpected /generate response (not an array):", result);
+      }
+
+      setTasks(tasks);
       setCurrentPage("quests");
+      console.log("✅ Page changed to 'quests'");
+      
     } catch (error) {
-      console.error("Error while generating tasks:", error);
+      console.error("❌ Error while generating tasks:", error);
+      console.error("Error message:", error.message);
+      console.error("Error stack:", error.stack);
     } finally {
       setLoading(false);
     }
   }
-
 
   function handleToggleTask(taskId) {
     const updatedTasks = tasks.map((task) =>
