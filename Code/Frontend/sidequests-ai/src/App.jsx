@@ -1,11 +1,8 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
-import IntroPage from './IntroPage'
-import QuestionsPage from './QuestionPage'
-import QuestPage from './QuestPage'
+import { useState } from "react";
+import "./App.css";
+import IntroPage from "./IntroPage";
+import QuestionsPage from "./QuestionPage";
+import QuestPage from "./QuestPage";
 
 function App() {
   const [currentPage, setCurrentPage] = useState("intro");
@@ -17,15 +14,13 @@ function App() {
     setCurrentPage("questions");
   }
 
-    async function handleGenerate(data) {
+  async function handleGenerate(data) {
     setUserAnswers(data);
     setLoading(true);
-    
-    console.log("🚀 handleGenerate called with:", data);
+
+    console.log("handleGenerate called with:", data);
 
     try {
-      console.log("📡 Sending request to http://localhost:8000/generate");
-      
       const response = await fetch("http://localhost:8000/generate", {
         method: "POST",
         headers: {
@@ -34,27 +29,16 @@ function App() {
         body: JSON.stringify(data),
       });
 
-      console.log("📥 Response status:", response.status);
-      console.log("📥 Response OK?:", response.ok);
+      console.log("Response status:", response.status);
 
       const result = await response.json();
-      console.log("📥 Response body:", result);
+      console.log("Response body:", result);
 
-      const tasks = Array.isArray(result?.tasks) ? result.tasks : [];
-      console.log("✅ Tasks extracted:", tasks);
-      
-      if (!Array.isArray(result?.tasks)) {
-        console.warn("⚠️ Unexpected /generate response (not an array):", result);
-      }
-
-      setTasks(tasks);
+      const newTasks = Array.isArray(result?.tasks) ? result.tasks : [];
+      setTasks(newTasks);
       setCurrentPage("quests");
-      console.log("✅ Page changed to 'quests'");
-      
     } catch (error) {
-      console.error("❌ Error while generating tasks:", error);
-      console.error("Error message:", error.message);
-      console.error("Error stack:", error.stack);
+      console.error("Error while generating study plan:", error);
     } finally {
       setLoading(false);
     }
@@ -79,7 +63,7 @@ function App() {
       {loading && (
         <main>
           <section>
-            <h1>Generating your quests...</h1>
+            <h1>Generating your study plan...</h1>
             <p>Please wait a moment.</p>
           </section>
         </main>

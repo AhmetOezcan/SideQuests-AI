@@ -1,0 +1,485 @@
+@import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Manrope:wght@400;500;600;700;800&display=swap');
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  min-height: 100%;
+}
+
+:root {
+  --quest-cream: #f7efe2;
+  --quest-sand: #ecd8b7;
+  --quest-gold: #d89a2b;
+  --quest-gold-deep: #9d6110;
+  --quest-ink: #1b1307;
+  --quest-brown: #5e4320;
+  --quest-surface: rgba(255, 250, 243, 0.78);
+  --quest-surface-strong: rgba(255, 247, 233, 0.92);
+  --quest-line: rgba(94, 67, 32, 0.12);
+  --quest-shadow: 0 24px 80px rgba(78, 52, 19, 0.14);
+}
+
+.quest-root {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at top left, rgba(216, 154, 43, 0.24), transparent 26%),
+    radial-gradient(circle at 82% 16%, rgba(157, 97, 16, 0.12), transparent 20%),
+    linear-gradient(135deg, #fbf4e7 0%, #f4e5ca 48%, #ecd6b1 100%);
+  color: var(--quest-ink);
+  font-family: 'Manrope', sans-serif;
+}
+
+.quest-noise {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(94, 67, 32, 0.08) 1px, transparent 1px);
+  background-size: 24px 24px;
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.quest-top,
+.quest-main {
+  position: relative;
+  z-index: 1;
+}
+
+.quest-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+  padding: clamp(24px, 4vw, 42px) clamp(22px, 5vw, 56px) 0;
+}
+
+.quest-kicker {
+  font-size: 0.82rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: rgba(27, 19, 7, 0.62);
+  margin-bottom: 10px;
+  font-weight: 800;
+}
+
+.quest-logo {
+  font-family: 'Abril Fatface', serif;
+  font-size: clamp(1.7rem, 2.7vw, 3rem);
+  line-height: 0.98;
+  letter-spacing: -0.03em;
+  max-width: 13ch;
+}
+
+.quest-step-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(94, 67, 32, 0.16);
+  background: rgba(255, 250, 243, 0.74);
+  backdrop-filter: blur(8px);
+  font-size: 0.84rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.quest-step-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f4c15d 0%, #a9650d 100%);
+  box-shadow: 0 0 0 5px rgba(216, 154, 43, 0.18);
+}
+
+.quest-main {
+  display: grid;
+  grid-template-columns: minmax(280px, 0.9fr) minmax(0, 1.1fr);
+  gap: clamp(24px, 4vw, 56px);
+  padding: clamp(24px, 3vw, 34px) clamp(22px, 5vw, 56px) clamp(36px, 6vw, 60px);
+}
+
+.quest-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+  padding-top: 22px;
+}
+
+.quest-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.85rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--quest-gold-deep);
+}
+
+.quest-eyebrow::before {
+  content: "";
+  width: 42px;
+  height: 2px;
+  border-radius: 999px;
+  background: currentColor;
+}
+
+.quest-headline {
+  font-family: 'Abril Fatface', serif;
+  font-size: clamp(3rem, 5.6vw, 5.4rem);
+  line-height: 1.03;
+  letter-spacing: -0.04em;
+  max-width: 9ch;
+}
+
+.quest-headline span {
+  display: block;
+  color: var(--quest-gold-deep);
+}
+
+.quest-desc {
+  max-width: 48ch;
+  font-size: clamp(1rem, 1.5vw, 1.12rem);
+  line-height: 1.8;
+  color: rgba(27, 19, 7, 0.74);
+}
+
+.quest-progress-card {
+  border-radius: 30px;
+  border: 1px solid var(--quest-line);
+  background: rgba(255, 248, 236, 0.72);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 16px 34px rgba(111, 82, 32, 0.08);
+  padding: 24px;
+}
+
+.quest-progress-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.quest-progress-label,
+.quest-progress-index {
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.quest-progress-label {
+  color: rgba(27, 19, 7, 0.52);
+}
+
+.quest-progress-index {
+  color: var(--quest-gold-deep);
+}
+
+.quest-progress-bar {
+  width: 100%;
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(94, 67, 32, 0.1);
+  overflow: hidden;
+  margin: 20px 0 22px;
+}
+
+.quest-progress-fill {
+  display: block;
+  width: 66%;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #f3c15d 0%, #bf7812 100%);
+}
+
+.quest-progress-steps {
+  display: grid;
+  gap: 14px;
+}
+
+.quest-progress-step {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px 16px;
+  border-radius: 18px;
+  background: rgba(255, 251, 244, 0.7);
+  border: 1px solid rgba(94, 67, 32, 0.08);
+}
+
+.quest-progress-step strong {
+  font-size: 0.86rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(27, 19, 7, 0.78);
+}
+
+.quest-progress-step span {
+  font-size: 0.92rem;
+  line-height: 1.45;
+  color: rgba(27, 19, 7, 0.62);
+}
+
+.quest-progress-step.active {
+  background: linear-gradient(135deg, rgba(255, 237, 201, 0.92) 0%, rgba(247, 217, 160, 0.78) 100%);
+  border-color: rgba(191, 120, 18, 0.18);
+}
+
+.quest-side-notes {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.quest-note-card {
+  min-height: 132px;
+  padding: 18px;
+  border-radius: 24px;
+  border: 1px solid var(--quest-line);
+  background: var(--quest-surface);
+  backdrop-filter: blur(8px);
+}
+
+.quest-note-value {
+  display: block;
+  font-family: 'Abril Fatface', serif;
+  font-size: 2rem;
+  line-height: 1;
+  color: var(--quest-gold-deep);
+  margin-bottom: 12px;
+}
+
+.quest-note-card p {
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: rgba(27, 19, 7, 0.7);
+}
+
+.quest-form-card {
+  border-radius: 36px;
+  border: 1px solid rgba(94, 67, 32, 0.14);
+  background:
+    linear-gradient(180deg, rgba(255, 250, 243, 0.94) 0%, rgba(243, 226, 194, 0.92) 100%);
+  box-shadow: var(--quest-shadow);
+  padding: clamp(24px, 3vw, 34px);
+}
+
+.quest-form-top {
+  max-width: 52ch;
+  margin-bottom: 30px;
+}
+
+.quest-form-kicker {
+  margin-bottom: 10px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(27, 19, 7, 0.55);
+}
+
+.quest-form-top h3 {
+  font-family: 'Abril Fatface', serif;
+  font-size: clamp(1.8rem, 3vw, 2.8rem);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  margin-bottom: 14px;
+}
+
+.quest-form-top p:last-child {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: rgba(27, 19, 7, 0.68);
+}
+
+.quest-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.quest-field {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.quest-field-wide {
+  grid-column: 1 / -1;
+}
+
+.quest-label {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: rgba(27, 19, 7, 0.84);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.quest-input,
+.quest-select {
+  width: 100%;
+  border: 1px solid rgba(94, 67, 32, 0.14);
+  border-radius: 20px;
+  background: var(--quest-surface-strong);
+  color: var(--quest-ink);
+  font-family: 'Manrope', sans-serif;
+  font-size: 1rem;
+  padding: 16px 18px;
+  outline: none;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.quest-input::placeholder {
+  color: rgba(27, 19, 7, 0.42);
+}
+
+.quest-select {
+  padding-right: 44px;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235e4320' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 18px center;
+}
+
+.quest-input:focus,
+.quest-select:focus {
+  border-color: rgba(191, 120, 18, 0.42);
+  box-shadow: 0 0 0 4px rgba(216, 154, 43, 0.14);
+  transform: translateY(-1px);
+}
+
+.quest-form-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
+  margin-top: 28px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(94, 67, 32, 0.1);
+}
+
+.quest-form-hint {
+  max-width: 30ch;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: rgba(27, 19, 7, 0.62);
+}
+
+.quest-submit {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  border: none;
+  border-radius: 999px;
+  padding: 18px 28px;
+  background: linear-gradient(135deg, #291b0a 0%, #5f3f13 100%);
+  color: #fff7eb;
+  font-family: 'Manrope', sans-serif;
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  box-shadow: 0 16px 34px rgba(51, 34, 10, 0.22);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+}
+
+.quest-submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 20px 42px rgba(51, 34, 10, 0.28);
+  filter: brightness(1.03);
+}
+
+.quest-submit-arrow {
+  transition: transform 0.18s ease;
+}
+
+.quest-submit:hover .quest-submit-arrow {
+  transform: translateX(4px);
+}
+
+@media (max-width: 1100px) {
+  .quest-main {
+    grid-template-columns: 1fr;
+  }
+
+  .quest-sidebar {
+    padding-top: 8px;
+  }
+
+  .quest-headline {
+    max-width: 11ch;
+  }
+}
+
+@media (max-width: 760px) {
+  .quest-top {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .quest-logo {
+    max-width: 10ch;
+  }
+
+  .quest-headline {
+    font-size: clamp(2.8rem, 14vw, 4.3rem);
+    max-width: none;
+  }
+
+  .quest-side-notes,
+  .quest-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .quest-form-footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .quest-form-hint {
+    max-width: none;
+  }
+
+  .quest-submit {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 520px) {
+  .quest-root {
+    min-height: 100svh;
+  }
+
+  .quest-top,
+  .quest-main {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  .quest-step-pill {
+    font-size: 0.75rem;
+  }
+
+  .quest-progress-card,
+  .quest-form-card {
+    border-radius: 28px;
+  }
+}
