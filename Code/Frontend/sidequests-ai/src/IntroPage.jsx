@@ -10,9 +10,9 @@ export default function IntroPage({ onStart }) {
         <div>
           <p className="intro-kicker">SideQuests AI</p>
           <h1 className="intro-logo">
-            Learn like a strategist,
+            Don't work hard,
             <br />
-            not like a grinder.
+            work smart.
           </h1>
         </div>
 
@@ -24,38 +24,46 @@ export default function IntroPage({ onStart }) {
 
       <section className="intro-hero">
         <div className="intro-copy">
-          <p className="intro-eyebrow">Your personal study guide</p>
+          <p className="intro-eyebrow">Dein persönlicher Lernbegleiter</p>
 
           <h2 className="intro-headline">
-            Turn vague goals into
-            <span> focused learning quests.</span>
+            Mach aus vagen Zielen
+            <span> klare Lern-Quests.</span>
           </h2>
 
           <p className="intro-sub">
-            Tell us what you want to learn and the professor will build a
-            clear, motivating path with the right pace, difficulty, and next
-            steps.
+            Sag uns, was du lernen willst, und SideQuests AI baut dir daraus
+            einen motivierenden Weg mit sinnvollen Schritten, passendem Tempo
+            und einem klaren nächsten Ziel statt planlosem Durcharbeiten.
           </p>
 
           <div className="intro-cta-row">
             <button className="intro-cta" onClick={onStart}>
-              Start your first quest
+              Los geht's!
             </button>
-            <p className="intro-hint">No sign-up. Just pick a topic and begin.</p>
+            <p className="intro-hint">
+              Kein langes Setup. Thema wählen, Fragen beantworten, loslegen.
+            </p>
           </div>
 
           <div className="intro-highlights">
             <article className="intro-highlight-card">
               <span className="intro-highlight-value">4</span>
-              <p className="intro-highlight-label">quick questions to set your path</p>
+              <p className="intro-highlight-label">
+                kurze Fragen bis zu deinem Lernpfad
+              </p>
             </article>
             <article className="intro-highlight-card">
               <span className="intro-highlight-value">AI</span>
-              <p className="intro-highlight-label">adapts the plan to your level</p>
+              <p className="intro-highlight-label">
+                passt den Plan an dein Niveau an
+              </p>
             </article>
             <article className="intro-highlight-card">
               <span className="intro-highlight-value">03</span>
-              <p className="intro-highlight-label">simple steps from topic to roadmap</p>
+              <p className="intro-highlight-label">
+                einfache Schritte vom Thema bis zur Roadmap
+              </p>
             </article>
           </div>
         </div>
@@ -66,11 +74,11 @@ export default function IntroPage({ onStart }) {
 
           <div className="intro-professor-card">
             <div className="intro-professor-copy">
-              <p className="intro-professor-label">Meet your guide</p>
-              <h3>The Professor</h3>
+              <p className="intro-professor-label">Dein Guide</p>
+              <h3>Der Professor</h3>
               <p>
-                He turns messy goals into structured quests with momentum,
-                checkpoints, and clarity.
+                Er verwandelt unklare Lernziele in einen strukturierten Weg mit
+                Fokus, Etappen und echter Orientierung.
               </p>
             </div>
 
@@ -80,13 +88,13 @@ export default function IntroPage({ onStart }) {
             </div>
 
             <div className="intro-professor-note intro-professor-note-top">
-              <strong>Quest setup</strong>
-              <span>topic, level, motivation</span>
+              <strong>Startklar</strong>
+              <span>Thema, Niveau, Motivation</span>
             </div>
 
             <div className="intro-professor-note intro-professor-note-bottom">
-              <strong>Outcome</strong>
-              <span>clear study path in minutes</span>
+              <strong>Ergebnis</strong>
+              <span>klarer Lernpfad in wenigen Minuten</span>
             </div>
           </div>
         </div>
