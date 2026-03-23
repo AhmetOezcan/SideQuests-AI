@@ -1,153 +1,120 @@
 import "./QuestPage.css";
 
-function getAnswerValue(userAnswers, keys, fallback = "Not specified") {
-  for (const key of keys) {
-    if (userAnswers?.[key]) {
-      return userAnswers[key];
-    }
-  }
-
-  return fallback;
-}
+const STOP_COLORS = [
+  "#f1cf3c",
+  "#ee8d2c",
+  "#7aa13f",
+  "#69bdd7",
+  "#9d2e93",
+  "#cb6d3e",
+  "#3d7f8f",
+  "#b88a2e",
+];
 
 function QuestPage({ userAnswers, tasks = [], onToggleTask }) {
   if (!userAnswers) {
     return null;
   }
 
-  const goal = getAnswerValue(userAnswers, ["goal", "topic"]);
-  const outcome = getAnswerValue(userAnswers, ["outcome", "goalLevel", "studyReason"]);
-  const experience = getAnswerValue(userAnswers, ["experience", "level"]);
-  const learningStyle = getAnswerValue(userAnswers, ["learningStyle"]);
-
-  const roadmapTasks = tasks.map((task, index) => ({
+  const questTasks = tasks.map((task, index) => ({
     ...task,
     id: task.id ?? index,
-    title: task.title || `Step ${index + 1}`,
+    title: task.title || `Quest ${index + 1}`,
     done: Boolean(task.done),
   }));
 
-  const completedTasks = roadmapTasks.filter((task) => task.done).length;
-  const progress = roadmapTasks.length
-    ? Math.round((completedTasks / roadmapTasks.length) * 100)
+  const completedTasks = questTasks.filter((task) => task.done).length;
+  const totalTasks = questTasks.length;
+  const progress = totalTasks
+    ? Math.round((completedTasks / totalTasks) * 100)
     : 0;
 
   return (
-    <main className="roadmap-root">
-      <div className="roadmap-noise" />
+    <main className="quest-board">
+      <section className="quest-board__progress">
+        <p className="quest-board__eyebrow">Quest Fortschritt</p>
 
-      <header className="roadmap-top">
-        <div>
-          <p className="roadmap-kicker">SideQuests AI</p>
-          <h1 className="roadmap-title">Your learning roadmap is ready.</h1>
-        </div>
+        <div className="quest-board__progress-main">
+          <div className="quest-board__progress-number">
+            <strong>{progress}%</strong>
+            <span>
+              {completedTasks} von {totalTasks} erledigt
+            </span>
+          </div>
 
-        <div className="roadmap-step-pill">
-          <span className="roadmap-step-dot" />
-          Step 3 of 3
-        </div>
-      </header>
-
-      <section className="roadmap-hero">
-        <div className="roadmap-summary-card">
-          <p className="roadmap-eyebrow">Mission overview</p>
-          <h2 className="roadmap-headline">
-            From goal to
-            <span> guided milestones.</span>
-          </h2>
-
-          <p className="roadmap-desc">
-            This roadmap breaks your learning goal into connected steps so you
-            always know what comes next and how far you have already come.
-          </p>
-
-          <div className="roadmap-meta">
-            <article className="roadmap-meta-card">
-              <span className="roadmap-meta-label">Goal</span>
-              <strong>{goal}</strong>
-            </article>
-            <article className="roadmap-meta-card">
-              <span className="roadmap-meta-label">Outcome</span>
-              <strong>{outcome}</strong>
-            </article>
-            <article className="roadmap-meta-card">
-              <span className="roadmap-meta-label">Level</span>
-              <strong>{experience}</strong>
-            </article>
-            <article className="roadmap-meta-card">
-              <span className="roadmap-meta-label">Style</span>
-              <strong>{learningStyle}</strong>
-            </article>
+          <div className="quest-board__progress-track">
+            <div className="quest-board__bar" aria-hidden="true">
+              <span
+                className="quest-board__fill"
+                style={{ width: `${progress}%` }}
+              />
+            </div>
           </div>
         </div>
-
-        <aside className="roadmap-progress-card">
-          <p className="roadmap-progress-label">Quest progress</p>
-          <div className="roadmap-progress-value">{progress}%</div>
-          <p className="roadmap-progress-copy">
-            {completedTasks} of {roadmapTasks.length} milestones completed
-          </p>
-
-          <div className="roadmap-progress-bar">
-            <span
-              className="roadmap-progress-fill"
-              style={{ width: `${progress}%` }}
-            />
-          </div>
-        </aside>
       </section>
 
-      <section className="roadmap-board">
-        <div className="roadmap-board-head">
-          <div>
-            <p className="roadmap-board-kicker">Roadmap</p>
-            <h2>Your next milestones</h2>
-          </div>
+      <section className="quest-board__roadmap-panel">
+        <div className="quest-board__roadmap-head">
+          <p className="quest-board__eyebrow">Roadmap</p>
         </div>
 
-        {roadmapTasks.length > 0 ? (
-          <div className="roadmap-timeline">
-            {roadmapTasks.map((task, index) => {
-              const sideClass = index % 2 === 0 ? "left" : "right";
+        {totalTasks > 0 ? (
+          <div className="quest-board__roadmap-scroll">
+            <ol
+              className="quest-roadmap"
+              style={{ "--quest-stop-count": totalTasks }}
+            >
+              {questTasks.map((task, index) => {
+                const isTop = index % 2 === 0;
 
-              return (
-                <article
-                  key={task.id}
-                  className={`roadmap-item ${sideClass} ${task.done ? "done" : ""}`}
-                >
-                  <div className="roadmap-card">
-                    <div className="roadmap-card-head">
-                      <span className="roadmap-order">
+                return (
+                  <li
+                    key={task.id}
+                    className={`quest-stop ${isTop ? "is-top" : "is-bottom"} ${
+                      task.done ? "is-done" : ""
+                    }`}
+                    style={{
+                      "--stop-color": STOP_COLORS[index % STOP_COLORS.length],
+                    }}
+                  >
+                    <div className="quest-stop__label">
+                      <span className="quest-stop__index">
                         {String(index + 1).padStart(2, "0")}
                       </span>
-                      <span className="roadmap-status">
-                        {task.done ? "Completed" : "In progress"}
-                      </span>
+
+                      <div className="quest-stop__content">
+                        <h2>{task.title}</h2>
+
+                        <button
+                          className="quest-stop__button"
+                          type="button"
+                          onClick={() => onToggleTask?.(task.id)}
+                        >
+                          {task.done ? "Offen" : "Fertig"}
+                        </button>
+                      </div>
                     </div>
 
-                    <h3>{task.title}</h3>
+                    <div className="quest-stop__stem" aria-hidden="true">
+                      <span className="quest-stop__dot" />
+                    </div>
 
-                    <button
-                      className="roadmap-action"
-                      type="button"
-                      onClick={() => onToggleTask(task.id)}
-                    >
-                      {task.done ? "Mark as open" : "Mark as done"}
-                    </button>
-                  </div>
-
-                  <div className="roadmap-node" aria-hidden="true" />
-                </article>
-              );
-            })}
+                    <div className="quest-stop__marker" aria-hidden="true">
+                      <span>
+                        {task.done
+                          ? "✓"
+                          : String(index + 1).padStart(2, "0")}
+                      </span>
+                    </div>
+                  </li>
+                );
+              })}
+            </ol>
           </div>
         ) : (
-          <div className="roadmap-empty">
-            <h3>No roadmap tasks yet</h3>
-            <p>
-              As soon as tasks are generated, they will appear here as connected
-              milestones.
-            </p>
+          <div className="quest-board__empty">
+            <h2>Noch keine Quests</h2>
+            <p>Hier erscheint deine Roadmap.</p>
           </div>
         )}
       </section>
