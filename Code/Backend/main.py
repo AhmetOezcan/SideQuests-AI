@@ -51,15 +51,24 @@ Current level:
 Preferred learning style:
 {data.learningStyle}
 
-Create a clear step-by-step study plan.
+Create a clear step-by-step SideQuests learning path.
 
 Rules:
-- Create between 4 and 8 tasks
-- Each task must be short, clear, and actionable
-- Focus on learning and understanding
+- Return between 4 and 8 tasks total
+- The structure must stay like a sequence of small quests
+- Each task must contain:
+  1. a short German title
+  2. a small, directly usable German prompt that the user can copy into any AI tool
+  3. an estimated number of minutes to invest
+- The prompts must help the user learn the topic step by step, not just describe what to do
 - Adapt the difficulty to the user's level
 - Adapt the structure to the user's learning style
-- Keep the wording simple
+- Keep the wording simple, concrete, and practical
+- Each prompt should be self-contained and ready to paste
+- Each prompt should be short: usually 1 to 3 sentences
+- Avoid vague tasks like "learn more", "research", or "read about it"
+- Do not mention model names or specific AI brands
+- The final task must be a test quest that gives a prompt for generating a test on the learned topic
 """,
             text={
                 "format": {
@@ -75,9 +84,15 @@ Rules:
                                 "items": {
                                     "type": "object",
                                     "properties": {
-                                        "title": {"type": "string"}
+                                        "title": {"type": "string"},
+                                        "prompt": {"type": "string"},
+                                        "estimatedMinutes": {
+                                            "type": "integer",
+                                            "minimum": 5,
+                                            "maximum": 90
+                                        }
                                     },
-                                    "required": ["title"],
+                                    "required": ["title", "prompt", "estimatedMinutes"],
                                     "additionalProperties": False
                                 }
                             }
@@ -100,6 +115,8 @@ Rules:
             tasks.append({
                 "id": i + 1,
                 "title": task["title"],
+                "prompt": task["prompt"],
+                "estimatedMinutes": task["estimatedMinutes"],
                 "done": False
             })
 
@@ -115,23 +132,47 @@ Rules:
         fallback_tasks = [
             {
                 "id": 1,
-                "title": f"Get an overview of {data.topic} using your notes, a textbook, or an AI tool.",
-                "done": False
+                "title": f"Überblick zu {data.topic}",
+                "prompt": (
+                    f"Erkläre mir {data.topic} auf {data.level}-Niveau in einfachen Worten. "
+                    f"Gib mir zuerst einen klaren Überblick, dann die 3 bis 5 wichtigsten Grundlagen "
+                    f"und schließe mit einer kleinen Verständnisfrage ab."
+                ),
+                "estimatedMinutes": 15,
+                "done": False,
             },
             {
                 "id": 2,
-                "title": f"Identify the most important basics of {data.topic}.",
-                "done": False
+                "title": "Grundlagen festigen",
+                "prompt": (
+                    f"Führe mich Schritt für Schritt durch die wichtigsten Grundlagen von {data.topic}. "
+                    f"Nutze einen {data.learningStyle}-Lernstil und baue kurze Beispiele ein, "
+                    f"damit ich den Stoff wirklich verstehe."
+                ),
+                "estimatedMinutes": 20,
+                "done": False,
             },
             {
                 "id": 3,
-                "title": f"Work on a first learning task that fits a {data.level} level.",
-                "done": False
+                "title": "Erste Übungsquest",
+                "prompt": (
+                    f"Gib mir eine kleine Übung zu {data.topic}, passend für {data.level}. "
+                    f"Lass mich zuerst selbst nachdenken, gib danach Feedback auf meine Lösung "
+                    f"und erkläre meine Fehler verständlich."
+                ),
+                "estimatedMinutes": 25,
+                "done": False,
             },
             {
                 "id": 4,
-                "title": f"Continue studying {data.topic} in a {data.learningStyle} way.",
-                "done": False
+                "title": "Mini-Test erzeugen",
+                "prompt": (
+                    f"Erstelle mir einen kurzen Test zu {data.topic}, passend für {data.level}. "
+                    f"Der Test soll 8 bis 10 Fragen mit gemischtem Schwierigkeitsgrad enthalten. "
+                    f"Gib die Lösungen erst nach meinem Versuch mit kurzen Erklärungen aus."
+                ),
+                "estimatedMinutes": 20,
+                "done": False,
             }
         ]
 
