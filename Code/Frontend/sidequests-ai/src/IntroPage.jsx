@@ -1,101 +1,71 @@
+import introImage from "./assets/bild_intro.png";
 import "./IntroPage.css";
-import professorImg from "./assets/professor_transparent2.png";
 
 export default function IntroPage({ onStart }) {
   return (
-    <main className="intro-root">
-      <div className="intro-noise" />
+    <main className="intro-page">
+      <div className="intro-page__grain" aria-hidden="true" />
 
-      <header className="intro-top">
-        <div>
-          <p className="intro-kicker">SideQuests AI</p>
-          <h1 className="intro-logo">
-            Don't work hard,
-            <br />
-            work smart.
-          </h1>
+      <header className="intro-nav">
+        <div className="intro-nav__group" />
+
+        <div className="intro-nav__brand">
+          <span>SideQuests AI</span>
         </div>
 
-        <div className="intro-step-pill">
-          <span className="intro-step-dot" />
-          Step 1 of 3
-        </div>
+        <div className="intro-nav__group intro-nav__group--right" />
       </header>
 
       <section className="intro-hero">
-        <div className="intro-copy">
-          <p className="intro-eyebrow">Dein persönlicher Lernbegleiter</p>
+        <div className="intro-hero__copy">
+          <p className="intro-hero__eyebrow">Structured AI Learning</p>
 
-          <h2 className="intro-headline">
-            Mach aus vagen Zielen
-            <span> klare Lern-Quests.</span>
-          </h2>
+          <h1 className="intro-hero__title">
+            The Art
+            <br />
+            of Prompting
+          </h1>
 
-          <p className="intro-sub">
-            Sag uns, was du lernen willst, und SideQuests AI baut dir daraus
-            einen motivierenden Weg mit sinnvollen Schritten, passendem Tempo
-            und einem klaren nächsten Ziel statt planlosem Durcharbeiten.
+          <p className="intro-hero__text">
+          Die Qualität von KI-Ergebnissen hängt von der Struktur des Inputs ab.
+          Sprachmodelle arbeiten probabilistisch auf Token-Ebene – jede Eingabe beeinflusst die Ausgabe.
+
+          Unstrukturierte Prompts führen zu generischen Antworten.
+
+          Diese Plattform nutzt systematisches Prompt Engineering, um Lernen zu strukturieren:
+          Wissen wird schrittweise aufgebaut, Kontext gezielt vermittelt und Ergebnisse iterativ verbessert.
+
+          Das führt zu präziseren, reproduzierbaren und hochwertigeren Resultaten.
           </p>
 
-          <div className="intro-cta-row">
-            <button className="intro-cta" onClick={onStart}>
-              Los geht's!
+          <div className="intro-hero__actions">
+            <button className="intro-hero__button intro-hero__button--primary" type="button" onClick={onStart}>
+              Start Quest
             </button>
-            <p className="intro-hint">
-              Kein langes Setup. Thema wählen, Fragen beantworten, loslegen.
-            </p>
+
+            <a className="intro-hero__button intro-hero__button--secondary" href="#intro-details">
+              Wie es funktioniert
+            </a>
           </div>
 
-          <div className="intro-highlights">
-            <article className="intro-highlight-card">
-              <span className="intro-highlight-value">4</span>
-              <p className="intro-highlight-label">
-                kurze Fragen bis zu deinem Lernpfad
-              </p>
-            </article>
-            <article className="intro-highlight-card">
-              <span className="intro-highlight-value">AI</span>
-              <p className="intro-highlight-label">
-                passt den Plan an dein Niveau an
-              </p>
-            </article>
-            <article className="intro-highlight-card">
-              <span className="intro-highlight-value">03</span>
-              <p className="intro-highlight-label">
-                einfache Schritte vom Thema bis zur Roadmap
-              </p>
-            </article>
+          <div className="intro-hero__meta" id="intro-details">
+            <p>4 Fragen bis zu deinem Pfad</p>
+            <p>Prompt direkt nutzbar</p>
+            <p>Mini-Test am Ende</p>
           </div>
+
         </div>
 
-        <div className="intro-visual">
-          <div className="intro-orbit intro-orbit-one" />
-          <div className="intro-orbit intro-orbit-two" />
+        <div className="intro-hero__visual" aria-hidden="true">
+          <div className="intro-art">
+            <span className="intro-art__shape intro-art__shape--peach" />
+            <span className="intro-art__shape intro-art__shape--berry" />
+            <span className="intro-art__shape intro-art__shape--leaf" />
+            <span className="intro-art__plant intro-art__plant--left" />
+            <span className="intro-art__plant intro-art__plant--right" />
 
-          <div className="intro-professor-card">
-            <div className="intro-professor-copy">
-              <p className="intro-professor-label">Dein Guide</p>
-              <h3>Der Professor</h3>
-              <p>
-                Er verwandelt unklare Lernziele in einen strukturierten Weg mit
-                Fokus, Etappen und echter Orientierung.
-              </p>
-            </div>
-
-            <div className="intro-professor-stage">
-              <div className="intro-professor-glow" />
-              <img src={professorImg} alt="Professor character" />
-            </div>
-
-            <div className="intro-professor-note intro-professor-note-top">
-              <strong>Startklar</strong>
-              <span>Thema, Niveau, Motivation</span>
-            </div>
-
-            <div className="intro-professor-note intro-professor-note-bottom">
-              <strong>Ergebnis</strong>
-              <span>klarer Lernpfad in wenigen Minuten</span>
-            </div>
+            <div className="intro-art__figure" />
+            <img className="intro-art__image" src={introImage} alt="" />
           </div>
         </div>
       </section>
