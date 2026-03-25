@@ -1,8 +1,9 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from openai import OpenAI
 import json
+from typing import Literal
 
 app = FastAPI()
 client = OpenAI()
@@ -24,6 +25,17 @@ class GoalRequest(BaseModel):
     studyReason: str
     level: str
     learningStyle: str
+
+
+class ChatMessage(BaseModel):
+    role: Literal["user", "assistant"]
+    content: str
+
+
+class ChatRequest(BaseModel):
+    topic: str = ""
+    taskTitle: str = ""
+    messages: list[ChatMessage]
 
 
 @app.get("/")
@@ -178,6 +190,61 @@ Rules:
 
         return {
             "tasks": fallback_tasks,
+            "source": "fallback",
+            "error": str(e)
+        }
+
+
+@app.post("/chat")
+def chat_with_quest(data: ChatRequest):
+    cleaned_messages = [
+        {
+            "role": message.role,
+            "content": message.content.strip(),
+        }
+        for message in data.messages
+        if message.content.strip()
+    ]
+
+    if not cleaned_messages:
+        raise HTTPException(status_code=400, detail="No messages provided")
+
+    try:
+        response = client.responses.create(
+            model="gpt-4.1-mini",
+            instructions=f"""
+You are a focused German learning coach inside SideQuests AI.
+
+Current study topic:
+{data.topic or "Unbekannt"}
+
+Current quest:
+{data.taskTitle or "Quest"}
+
+Rules:
+- Answer in German
+- Use only the messages from this single quest as context
+- Be practical, clear, and concise
+- Stay focused on helping the user complete this specific quest
+- If the user answers an exercise, give feedback and explain mistakes clearly
+""",
+            input=cleaned_messages,
+        )
+
+        return {
+            "reply": response.output_text,
+            "source": "openai"
+        }
+
+    except Exception as e:
+        print("ERROR IN /chat:")
+        print(e)
+
+        return {
+            "reply": (
+                "Ich konnte gerade keine neue Quest-Antwort erzeugen. "
+                "Versuche es bitte in einem Moment noch einmal."
+            ),
             "source": "fallback",
             "error": str(e)
         }
