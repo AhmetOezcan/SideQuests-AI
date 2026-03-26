@@ -227,6 +227,10 @@ Rules:
 - Be practical, clear, and concise
 - Stay focused on helping the user complete this specific quest
 - If the user answers an exercise, give feedback and explain mistakes clearly
+- Do not answer as one long text block
+- Use short paragraphs with visible line breaks
+- Use bullet points or numbered steps when listing actions
+- Use simple Markdown emphasis like **wichtige Begriffe** or short **Zwischenüberschriften** when useful
 """,
             input=cleaned_messages,
         )
