@@ -5,7 +5,7 @@ const QUESTION_FLOW = [
   {
     id: "topic",
     title: "Was willst du lernen?",
-    hint: "Schreib einfach dein Thema hinein.",
+    hint: "Je spezifischer, desto besser",
     type: "text",
     placeholder: "z. B. Python Basics, Algebra, Datenbanken",
     buttonLabel: "Antworten",
@@ -50,7 +50,7 @@ const QUESTION_FLOW = [
   },
 ];
 
-export default function QuestionsPage({ onGenerate }) {
+export default function QuestionsPage({ onGenerate, isGenerating = false }) {
   const [answers, setAnswers] = useState({
     topic: "",
     studyReason: "",
@@ -71,7 +71,7 @@ export default function QuestionsPage({ onGenerate }) {
   }
 
   function handleNext() {
-    if (!activeValue) {
+    if (!activeValue || isGenerating) {
       return;
     }
 
@@ -84,6 +84,10 @@ export default function QuestionsPage({ onGenerate }) {
   }
 
   function handleBack() {
+    if (isGenerating) {
+      return;
+    }
+
     setCurrentStep((step) => Math.max(0, step - 1));
   }
 
@@ -96,7 +100,7 @@ export default function QuestionsPage({ onGenerate }) {
     <main className="question-screen">
       <div className="question-screen__texture" />
 
-      <form className="question-card" onSubmit={handleSubmit}>
+      <form className="question-card" onSubmit={handleSubmit} aria-busy={isGenerating}>
         <div className="question-card__top">
           <span className="question-card__brand">SideQuests AI</span>
           <span className="question-card__step">
@@ -122,8 +126,9 @@ export default function QuestionsPage({ onGenerate }) {
                 updateAnswer(activeQuestion.id, event.target.value)
               }
               placeholder={activeQuestion.placeholder}
-              autoFocus
+              autoFocus={!isGenerating}
               required
+              disabled={isGenerating}
             />
           ) : (
             <div className="question-options" role="radiogroup">
@@ -135,6 +140,7 @@ export default function QuestionsPage({ onGenerate }) {
                     key={option.value}
                     className={`question-option ${isActive ? "is-active" : ""}`}
                     type="button"
+                    disabled={isGenerating}
                     onClick={() => updateAnswer(activeQuestion.id, option.value)}
                   >
                     {option.label}
@@ -150,7 +156,7 @@ export default function QuestionsPage({ onGenerate }) {
             className="question-button question-button--ghost"
             type="button"
             onClick={handleBack}
-            disabled={currentStep === 0}
+            disabled={currentStep === 0 || isGenerating}
           >
             Zurück
           </button>
@@ -158,12 +164,21 @@ export default function QuestionsPage({ onGenerate }) {
           <button
             className="question-button question-button--primary"
             type="submit"
-            disabled={!activeValue}
+            disabled={!activeValue || isGenerating}
           >
-            {activeQuestion.buttonLabel}
+            {isGenerating ? "Wird erstellt..." : activeQuestion.buttonLabel}
           </button>
         </div>
       </form>
+
+      {isGenerating && (
+        <div className="question-loading" role="status" aria-live="polite">
+          <section className="question-loading__panel" aria-label="Lernpfad wird erstellt">
+            <div className="question-loading__spinner" aria-hidden="true" />
+            <h2>Deine Quest wird in Kürze erstellt</h2>
+          </section>
+        </div>
+      )}
     </main>
   );
 }
