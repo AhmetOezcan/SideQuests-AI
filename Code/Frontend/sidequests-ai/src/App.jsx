@@ -205,17 +205,8 @@ function App() {
     <>
       {currentPage === "intro" && <IntroPage onStart={goToQuestions} />}
 
-      {currentPage === "questions" && (
-        <QuestionsPage onGenerate={handleGenerate} />
-      )}
-
-      {loading && (
-        <main>
-          <section>
-            <h1>Generating your study plan...</h1>
-            <p>Please wait a moment.</p>
-          </section>
-        </main>
+      {(currentPage === "questions" || (currentPage === "quests" && loading)) && (
+        <QuestionsPage onGenerate={handleGenerate} isGenerating={loading} />
       )}
 
       {currentPage === "quests" && !loading && (

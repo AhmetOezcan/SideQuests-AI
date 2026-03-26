@@ -162,6 +162,12 @@ body {
     border-color 180ms ease;
 }
 
+.intro-hero__button:focus-visible,
+.intro-modal__close:focus-visible {
+  outline: 3px solid rgba(139, 36, 77, 0.34);
+  outline-offset: 3px;
+}
+
 .intro-hero__button:hover {
   transform: translateY(-2px);
 }
@@ -204,6 +210,159 @@ body {
 }
 
 .intro-hero__meta p {
+  margin: 0;
+}
+
+.intro-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: grid;
+  place-items: center;
+  padding: clamp(18px, 3vw, 30px);
+  background:
+    radial-gradient(circle at top, rgba(255, 244, 210, 0.26), transparent 35%),
+    rgba(38, 20, 31, 0.44);
+  backdrop-filter: blur(14px);
+  overflow-y: auto;
+}
+
+.intro-modal__dialog {
+  width: min(980px, 100%);
+  border: 1px solid rgba(40, 18, 38, 0.12);
+  border-radius: 30px;
+  padding: clamp(22px, 4vw, 38px);
+  background:
+    linear-gradient(180deg, rgba(255, 251, 243, 0.98) 0%, rgba(249, 238, 211, 0.98) 100%);
+  color: var(--intro-ink);
+  box-shadow: 0 34px 90px rgba(58, 34, 23, 0.24);
+}
+
+.intro-modal__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.intro-modal__eyebrow,
+.intro-modal__card-eyebrow {
+  margin: 0;
+  color: rgba(40, 18, 38, 0.62);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.intro-modal__title {
+  margin: 12px 0 0;
+  font-family: "Fraunces", serif;
+  font-size: clamp(2rem, 4vw, 3.4rem);
+  line-height: 0.96;
+  letter-spacing: -0.06em;
+}
+
+.intro-modal__close {
+  flex: 0 0 auto;
+  width: 48px;
+  height: 48px;
+  border: 1px solid rgba(40, 18, 38, 0.18);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.58);
+  color: var(--intro-ink);
+  font: inherit;
+  font-size: 1.7rem;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    transform 180ms ease,
+    background-color 180ms ease,
+    border-color 180ms ease;
+}
+
+.intro-modal__close:hover {
+  transform: rotate(90deg);
+  background: rgba(255, 255, 255, 0.84);
+  border-color: rgba(40, 18, 38, 0.3);
+}
+
+.intro-modal__lead {
+  max-width: 46rem;
+  margin: 24px 0 0;
+  color: var(--intro-copy);
+  font-size: 1.04rem;
+  line-height: 1.8;
+}
+
+.intro-modal__stack {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 24px;
+}
+
+.intro-modal__chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 10px 16px;
+  border: 1px solid rgba(40, 18, 38, 0.12);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.6);
+  color: rgba(40, 18, 38, 0.8);
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.intro-modal__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 28px;
+}
+
+.intro-modal__card {
+  min-height: 100%;
+  padding: 22px;
+  border: 1px solid rgba(40, 18, 38, 0.12);
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at top right, rgba(255, 111, 118, 0.12), transparent 36%),
+    rgba(255, 250, 239, 0.84);
+}
+
+.intro-modal__card h3 {
+  margin: 14px 0 0;
+  font-family: "Fraunces", serif;
+  font-size: 1.5rem;
+  line-height: 1.08;
+  letter-spacing: -0.04em;
+}
+
+.intro-modal__list {
+  margin: 18px 0 0;
+  padding-left: 18px;
+  color: var(--intro-copy);
+  line-height: 1.7;
+}
+
+.intro-modal__list li + li {
+  margin-top: 10px;
+}
+
+.intro-modal__footer {
+  margin-top: 24px;
+  padding: 18px 20px;
+  border-left: 4px solid var(--intro-accent);
+  border-radius: 18px;
+  background: rgba(255, 244, 236, 0.85);
+  color: var(--intro-ink);
+  font-weight: 700;
+  line-height: 1.7;
+}
+
+.intro-modal__footer p {
   margin: 0;
 }
 
@@ -423,6 +582,10 @@ body {
     min-height: 520px;
     margin: 0 auto;
   }
+
+  .intro-modal__grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 720px) {
@@ -461,6 +624,33 @@ body {
   .intro-hero__visual,
   .intro-art {
     min-height: 420px;
+  }
+
+  .intro-modal {
+    padding: 14px;
+  }
+
+  .intro-modal__dialog {
+    border-radius: 24px;
+    padding: 20px 18px 22px;
+  }
+
+  .intro-modal__header {
+    gap: 14px;
+  }
+
+  .intro-modal__title {
+    font-size: clamp(1.9rem, 10vw, 2.7rem);
+  }
+
+  .intro-modal__close {
+    width: 42px;
+    height: 42px;
+    font-size: 1.45rem;
+  }
+
+  .intro-modal__card {
+    padding: 18px;
   }
 
   .intro-art__figure {
