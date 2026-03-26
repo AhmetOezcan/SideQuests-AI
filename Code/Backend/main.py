@@ -1,19 +1,31 @@
+import json
+import os
+from typing import Literal
+
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
 from openai import OpenAI
-import json
-from typing import Literal
+from pydantic import BaseModel
 
 app = FastAPI()
 client = OpenAI()
 
+frontend_origins = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+]
+
+configured_origins = os.getenv("FRONTEND_ORIGINS", "")
+if configured_origins.strip():
+    frontend_origins.extend(
+        origin.strip()
+        for origin in configured_origins.split(",")
+        if origin.strip()
+    )
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",
-        "http://127.0.0.1:5173",
-    ],
+    allow_origins=frontend_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

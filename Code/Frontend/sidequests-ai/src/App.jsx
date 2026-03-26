@@ -1,8 +1,19 @@
 import { useEffect, useRef, useState } from "react";
 import "./App.css";
 import IntroPage from "./IntroPage";
-import QuestionPage from "./QuestionPage";
+import QuestionsPage from "./QuestionPage";
 import QuestPage from "./QuestPage";
+
+const API_BASE_URL = (
+  import.meta.env.VITE_API_BASE_URL ??
+  (import.meta.env.DEV ? "http://localhost:8000" : "")
+)
+  .trim()
+  .replace(/\/$/, "");
+
+function getApiUrl(path) {
+  return API_BASE_URL ? `${API_BASE_URL}${path}` : path;
+}
 
 function createMessage(role, content) {
   return {
@@ -50,7 +61,7 @@ function App() {
     console.log("handleGenerate called with:", data);
 
     try {
-      const response = await fetch("http://localhost:8000/generate", {
+      const response = await fetch(getApiUrl("/generate"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -122,7 +133,7 @@ function App() {
     );
 
     try {
-      const response = await fetch("http://localhost:8000/chat", {
+      const response = await fetch(getApiUrl("/chat"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
