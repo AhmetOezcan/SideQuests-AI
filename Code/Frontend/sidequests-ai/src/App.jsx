@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import "./App.css";
 import IntroPage from "./IntroPage";
-import QuestionsPage from "./QuestionPage";
+import QuestionPage from "./QuestionPage";
 import QuestPage from "./QuestPage";
 
 function createMessage(role, content) {
