@@ -1,0 +1,665 @@
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap");
+
+body {
+  margin: 0;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.quest-page {
+  --quest-bg: #f8edd5;
+  --quest-bg-deep: #f3e2b9;
+  --quest-surface: rgba(255, 250, 239, 0.84);
+  --quest-surface-strong: rgba(255, 249, 241, 0.97);
+  --quest-border: rgba(40, 18, 38, 0.12);
+  --quest-copy: #51404f;
+  --quest-ink: #281226;
+  --quest-accent: #ff6f76;
+  --quest-accent-dark: #e65663;
+  --quest-berry: #8b244d;
+  --quest-gold: #f4ba43;
+  --quest-gold-deep: #d99726;
+  --quest-leaf: #a6af56;
+  --quest-leaf-deep: #7f8b3f;
+  --quest-shadow: 0 28px 48px rgba(103, 72, 31, 0.16);
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  padding: clamp(18px, 3vw, 34px);
+  background:
+    radial-gradient(circle at top left, rgba(255, 255, 255, 0.9), transparent 24%),
+    linear-gradient(180deg, var(--quest-bg) 0%, var(--quest-bg-deep) 100%);
+  color: var(--quest-ink);
+  font-family: "Manrope", sans-serif;
+}
+
+.quest-page__texture {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.32;
+  background-image: radial-gradient(
+    circle at 16px 16px,
+    rgba(40, 18, 38, 0.1) 0 3px,
+    transparent 3.5px
+  );
+  background-size: 58px 58px;
+}
+
+.quest-completion {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.quest-completion__sparkles {
+  position: absolute;
+  inset: 0;
+}
+
+.quest-completion__sparkle {
+  position: absolute;
+  top: -8vh;
+  left: var(--sparkle-left);
+  width: var(--sparkle-size);
+  height: calc(var(--sparkle-size) * 1.8);
+  border-radius: 999px;
+  opacity: 0;
+  transform: rotate(var(--sparkle-rotate));
+  animation: quest-celebration-fall var(--sparkle-duration) ease-in forwards;
+  animation-delay: var(--sparkle-delay);
+}
+
+.quest-completion__sparkle:nth-child(4n + 1) {
+  background: linear-gradient(180deg, var(--quest-accent) 0%, var(--quest-accent-dark) 100%);
+}
+
+.quest-completion__sparkle:nth-child(4n + 2) {
+  background: linear-gradient(180deg, var(--quest-gold) 0%, var(--quest-gold-deep) 100%);
+}
+
+.quest-completion__sparkle:nth-child(4n + 3) {
+  background: linear-gradient(180deg, #e9f1c4 0%, var(--quest-leaf) 100%);
+}
+
+.quest-completion__sparkle:nth-child(4n + 4) {
+  background: linear-gradient(180deg, #c95d7f 0%, var(--quest-berry) 100%);
+}
+
+.quest-completion__badge {
+  position: absolute;
+  top: clamp(22px, 7vh, 60px);
+  left: 50%;
+  transform: translateX(-50%);
+  display: grid;
+  gap: 8px;
+  min-width: min(92vw, 380px);
+  padding: 18px 24px;
+  border-radius: 28px;
+  border: 1px solid rgba(40, 18, 38, 0.12);
+  background:
+    linear-gradient(180deg, rgba(255, 251, 243, 0.98) 0%, rgba(249, 238, 211, 0.98) 100%);
+  box-shadow: 0 26px 56px rgba(103, 72, 31, 0.2);
+  text-align: center;
+  animation: quest-celebration-pop 800ms cubic-bezier(0.2, 0.9, 0.25, 1) forwards;
+}
+
+.quest-completion__badge p,
+.quest-completion__badge strong {
+  margin: 0;
+}
+
+.quest-completion__badge p {
+  color: var(--quest-copy);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.quest-completion__badge strong {
+  font-family: "Fraunces", serif;
+  font-size: clamp(1.55rem, 3vw, 2.2rem);
+  letter-spacing: -0.04em;
+  color: var(--quest-berry);
+}
+
+.quest-roadmap-view {
+  position: relative;
+  z-index: 1;
+  width: min(1120px, 100%);
+  margin: 0 auto;
+}
+
+.quest-roadmap-view__eyebrow {
+  margin: 0;
+  color: var(--quest-copy);
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.quest-roadmap-view h1,
+.quest-task-card h2,
+.quest-chat-panel__title h2,
+.quest-empty h2 {
+  margin: 0;
+  font-family: "Fraunces", serif;
+  letter-spacing: -0.05em;
+}
+
+.quest-roadmap-view h1 {
+  margin-top: 10px;
+  font-size: clamp(2.9rem, 7vw, 5rem);
+  line-height: 0.92;
+}
+
+.quest-task-list {
+  position: relative;
+  margin: 38px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.quest-task-list::before {
+  content: "";
+  position: absolute;
+  top: 28px;
+  bottom: 28px;
+  left: 46px;
+  width: 4px;
+  border-radius: 999px;
+  background: linear-gradient(
+    180deg,
+    rgba(244, 186, 67, 0.34) 0%,
+    rgba(230, 86, 99, 0.14) 100%
+  );
+}
+
+.quest-task-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: 92px minmax(0, 1fr);
+  gap: 18px;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.quest-task-card__line {
+  position: absolute;
+  top: 50%;
+  left: 44px;
+  width: 28px;
+  height: 4px;
+  border-radius: 999px;
+  transform: translateY(-50%);
+  background: rgba(244, 186, 67, 0.48);
+}
+
+.quest-task-card__number {
+  position: relative;
+  z-index: 1;
+  width: 92px;
+  height: 92px;
+  display: grid;
+  place-items: center;
+  border-radius: 28px;
+  background: linear-gradient(180deg, #fff5f2 0%, #fbe1da 100%);
+  border: 3px solid rgba(230, 86, 99, 0.2);
+  box-shadow: 0 18px 38px rgba(103, 72, 31, 0.12);
+  color: var(--quest-accent-dark);
+}
+
+.quest-task-card__index {
+  font-family: "Fraunces", serif;
+  font-size: 1.9rem;
+  font-weight: 700;
+  letter-spacing: -0.05em;
+}
+
+.quest-task-card__content {
+  padding: clamp(22px, 3vw, 30px);
+  border-radius: 32px;
+  border: 1px solid var(--quest-border);
+  background: var(--quest-surface);
+  box-shadow: var(--quest-shadow);
+  backdrop-filter: blur(16px);
+}
+
+.quest-task-card__topline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.quest-task-card__label,
+.quest-task-card__status,
+.quest-chat-panel__title p {
+  margin: 0;
+  color: var(--quest-copy);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.quest-task-card__status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 34px;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: rgba(139, 36, 77, 0.1);
+  color: var(--quest-berry);
+  letter-spacing: 0.08em;
+}
+
+.quest-task-card h2 {
+  margin-top: 14px;
+  font-size: clamp(1.7rem, 3vw, 2.4rem);
+  line-height: 1.02;
+}
+
+.quest-task-card .quest-button {
+  margin-top: 22px;
+}
+
+.quest-task-card.is-done .quest-task-card__number {
+  background: linear-gradient(
+    180deg,
+    #edf4cf 0%,
+    #d8e79e 100%
+  );
+  color: var(--quest-leaf-deep);
+  border-color: rgba(127, 139, 63, 0.24);
+  box-shadow: 0 18px 38px rgba(127, 139, 63, 0.18);
+}
+
+.quest-button {
+  min-height: 54px;
+  border: 0;
+  border-radius: 18px;
+  padding: 0 22px;
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease,
+    background-color 160ms ease,
+    color 160ms ease,
+    border-color 160ms ease;
+}
+
+.quest-button:hover {
+  transform: translateY(-2px);
+}
+
+.quest-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  transform: none;
+}
+
+.quest-button--primary {
+  background: linear-gradient(
+    180deg,
+    var(--quest-accent) 0%,
+    var(--quest-accent-dark) 100%
+  );
+  color: #ffffff;
+  box-shadow: 0 16px 30px rgba(230, 86, 99, 0.24);
+}
+
+.quest-button--secondary,
+.quest-button--ghost {
+  border: 1px solid rgba(40, 18, 38, 0.14);
+  background: rgba(255, 250, 239, 0.82);
+  color: var(--quest-berry);
+}
+
+.quest-empty {
+  margin-top: 32px;
+  padding: 34px;
+  border-radius: 28px;
+  border: 1px dashed rgba(139, 36, 77, 0.18);
+  background: rgba(255, 249, 241, 0.56);
+  text-align: center;
+}
+
+.quest-empty h2 {
+  font-size: 2rem;
+}
+
+.quest-empty p,
+.quest-chat-empty p,
+.quest-message p,
+.quest-chat-error {
+  margin: 0;
+  color: var(--quest-copy);
+  line-height: 1.7;
+}
+
+.quest-chat-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: grid;
+  place-items: center;
+  padding: clamp(14px, 3vw, 30px);
+  background: rgba(40, 18, 38, 0.34);
+  backdrop-filter: blur(14px);
+}
+
+.quest-chat-panel {
+  width: min(1120px, 100%);
+  height: min(88vh, 920px);
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: 18px;
+  padding: clamp(18px, 3vw, 28px);
+  border-radius: 34px;
+  border: 1px solid var(--quest-border);
+  background: var(--quest-surface-strong);
+  box-shadow: 0 34px 80px rgba(73, 44, 26, 0.22);
+}
+
+.quest-chat-panel__header {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 16px;
+  align-items: center;
+}
+
+.quest-chat-panel__title {
+  min-width: 0;
+  text-align: center;
+}
+
+.quest-chat-panel__title h2 {
+  margin-top: 8px;
+  font-size: clamp(1.8rem, 3vw, 2.5rem);
+  line-height: 1.04;
+}
+
+.quest-chat-thread {
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding-right: 6px;
+}
+
+.quest-chat-empty {
+  padding: 22px;
+  border-radius: 24px;
+  background: #fbf4e4;
+  border: 1px solid rgba(40, 18, 38, 0.08);
+}
+
+.quest-message {
+  max-width: min(78%, 720px);
+  padding: 16px 18px;
+  border-radius: 24px;
+  background: #fff8ec;
+  border: 1px solid rgba(40, 18, 38, 0.08);
+}
+
+.quest-message__body {
+  display: grid;
+  gap: 10px;
+}
+
+.quest-message--user {
+  align-self: flex-end;
+  background: linear-gradient(180deg, var(--quest-accent) 0%, var(--quest-berry) 100%);
+  border-color: transparent;
+}
+
+.quest-message--user p,
+.quest-message--user li,
+.quest-message--user strong {
+  color: #ffffff;
+}
+
+.quest-message--assistant {
+  align-self: flex-start;
+  background: #fff8ec;
+}
+
+.quest-message__paragraph,
+.quest-message__heading,
+.quest-message__list {
+  margin: 0;
+}
+
+.quest-message__paragraph,
+.quest-message__list li {
+  line-height: 1.75;
+}
+
+.quest-message__heading {
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--quest-ink);
+}
+
+.quest-message__list {
+  display: grid;
+  gap: 8px;
+  padding-left: 1.3rem;
+}
+
+.quest-message__list--ordered {
+  padding-left: 1.45rem;
+}
+
+.quest-message strong {
+  font-weight: 800;
+  color: var(--quest-berry);
+}
+
+.quest-message--user .quest-message__heading,
+.quest-message--user strong {
+  color: #ffffff;
+}
+
+.quest-message.is-loading {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+}
+
+.quest-message.is-loading span {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(139, 36, 77, 0.42);
+  animation: quest-loading 1s infinite ease-in-out;
+}
+
+.quest-message.is-loading span:nth-child(2) {
+  animation-delay: 120ms;
+}
+
+.quest-message.is-loading span:nth-child(3) {
+  animation-delay: 240ms;
+}
+
+.quest-chat-error {
+  padding: 14px 16px;
+  border-radius: 18px;
+  background: rgba(230, 86, 99, 0.08);
+  color: var(--quest-berry);
+}
+
+.quest-chat-composer {
+  display: grid;
+  gap: 14px;
+}
+
+.quest-chat-composer textarea {
+  width: 100%;
+  min-height: 118px;
+  resize: none;
+  box-sizing: border-box;
+  padding: 16px 18px;
+  border-radius: 22px;
+  border: 1px solid rgba(40, 18, 38, 0.1);
+  background: #fffaf1;
+  color: var(--quest-ink);
+  font: inherit;
+  line-height: 1.6;
+}
+
+.quest-chat-composer textarea:focus,
+.quest-button:focus-visible {
+  outline: 3px solid rgba(139, 36, 77, 0.18);
+  outline-offset: 3px;
+}
+
+.quest-chat-composer__actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+@keyframes quest-loading {
+  0%,
+  80%,
+  100% {
+    transform: scale(0.7);
+    opacity: 0.45;
+  }
+
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes quest-celebration-pop {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-16px) scale(0.92);
+  }
+
+  60% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1.02);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+}
+
+@keyframes quest-celebration-fall {
+  0% {
+    opacity: 0;
+    transform: translateY(0) rotate(var(--sparkle-rotate)) scale(0.8);
+  }
+
+  10% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(112vh) rotate(calc(var(--sparkle-rotate) + 180deg)) scale(1);
+  }
+}
+
+@media (max-width: 820px) {
+  .quest-task-card {
+    grid-template-columns: 74px minmax(0, 1fr);
+    gap: 14px;
+  }
+
+  .quest-task-list::before {
+    left: 36px;
+  }
+
+  .quest-task-card__line {
+    left: 34px;
+    width: 24px;
+  }
+
+  .quest-task-card__number {
+    width: 74px;
+    height: 74px;
+    border-radius: 22px;
+    font-size: 1.55rem;
+  }
+
+  .quest-chat-panel {
+    height: min(100vh - 28px, 920px);
+    border-radius: 28px;
+  }
+
+  .quest-chat-panel__header {
+    grid-template-columns: 1fr;
+  }
+
+  .quest-chat-panel__title {
+    text-align: left;
+  }
+
+  .quest-chat-composer__actions {
+    flex-direction: column;
+  }
+
+  .quest-message {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 560px) {
+  .quest-page {
+    padding: 14px;
+  }
+
+  .quest-roadmap-view h1 {
+    font-size: clamp(2.4rem, 14vw, 3.4rem);
+  }
+
+  .quest-task-card__content {
+    padding: 18px;
+    border-radius: 24px;
+  }
+
+  .quest-task-card h2 {
+    font-size: 1.4rem;
+  }
+
+  .quest-button {
+    width: 100%;
+  }
+
+  .quest-chat-overlay {
+    padding: 8px;
+  }
+
+  .quest-chat-panel {
+    width: 100%;
+    height: calc(100vh - 16px);
+    gap: 14px;
+    padding: 14px;
+    border-radius: 24px;
+  }
+
+  .quest-chat-composer textarea {
+    min-height: 104px;
+  }
+}
