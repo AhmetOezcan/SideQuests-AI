@@ -252,6 +252,18 @@ body,
     inset -5px -5px 10px rgba(220, 186, 145, 0.28);
 }
 
+.question-card__error {
+  margin: 18px 0 0;
+  padding: 16px 18px;
+  border: 1px solid rgba(186, 88, 46, 0.24);
+  border-radius: 18px;
+  background: rgba(255, 245, 236, 0.92);
+  color: #9a4f25;
+  font-size: 0.98rem;
+  line-height: 1.55;
+  text-align: left;
+}
+
 .question-loading {
   position: absolute;
   inset: 0;

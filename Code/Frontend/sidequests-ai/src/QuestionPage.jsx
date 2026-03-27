@@ -50,7 +50,11 @@ const QUESTION_FLOW = [
   },
 ];
 
-export default function QuestionsPage({ onGenerate, isGenerating = false }) {
+export default function QuestionsPage({
+  onGenerate,
+  isGenerating = false,
+  errorMessage = "",
+}) {
   const [answers, setAnswers] = useState({
     topic: "",
     studyReason: "",
@@ -169,6 +173,12 @@ export default function QuestionsPage({ onGenerate, isGenerating = false }) {
             {isGenerating ? "Wird erstellt..." : activeQuestion.buttonLabel}
           </button>
         </div>
+
+        {errorMessage ? (
+          <p className="question-card__error" role="alert">
+            {errorMessage}
+          </p>
+        ) : null}
       </form>
 
       {isGenerating && (

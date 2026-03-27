@@ -15,6 +15,45 @@ function getApiUrl(path) {
   return API_BASE_URL ? `${API_BASE_URL}${path}` : path;
 }
 
+async function parseApiResponse(response, endpoint) {
+  const contentType = response.headers.get("content-type") || "";
+  const rawBody = await response.text();
+
+  let payload = null;
+
+  if (rawBody) {
+    try {
+      payload = JSON.parse(rawBody);
+    } catch (error) {
+      if (!response.ok || !contentType.includes("application/json")) {
+        throw new Error(
+          `Der API-Endpunkt ${endpoint} hat ${response.status} geliefert, aber keine JSON-Antwort. Auf Vercel bedeutet das meist: Endpoint fehlt oder VITE_API_BASE_URL zeigt auf die falsche Backend-URL.`
+        );
+      }
+
+      throw new Error(
+        `Der API-Endpunkt ${endpoint} hat ungultiges JSON zuruckgegeben.`
+      );
+    }
+  }
+
+  if (!response.ok) {
+    if (typeof payload?.error === "string" && payload.error.trim()) {
+      throw new Error(payload.error.trim());
+    }
+
+    throw new Error(`Der API-Endpunkt ${endpoint} hat ${response.status} geliefert.`);
+  }
+
+  if (!payload || typeof payload !== "object") {
+    throw new Error(
+      `Der API-Endpunkt ${endpoint} hat keine verwendbare JSON-Antwort geliefert.`
+    );
+  }
+
+  return payload;
+}
+
 function createMessage(role, content) {
   return {
     id: `${role}-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`,
@@ -44,6 +83,7 @@ function App() {
   const [userAnswers, setUserAnswers] = useState(null);
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [generationError, setGenerationError] = useState("");
   const tasksRef = useRef(tasks);
 
   useEffect(() => {
@@ -57,8 +97,10 @@ function App() {
   async function handleGenerate(data) {
     setUserAnswers(data);
     setLoading(true);
+    setGenerationError("");
 
     console.log("handleGenerate called with:", data);
+    console.log("Generate request URL:", getApiUrl("/generate"));
 
     try {
       const response = await fetch(getApiUrl("/generate"), {
@@ -71,7 +113,7 @@ function App() {
 
       console.log("Response status:", response.status);
 
-      const result = await response.json();
+      const result = await parseApiResponse(response, getApiUrl("/generate"));
       console.log("Response body:", result);
 
       const newTasks = Array.isArray(result?.tasks) ? result.tasks : [];
@@ -79,6 +121,11 @@ function App() {
       setCurrentPage("quests");
     } catch (error) {
       console.error("Error while generating study plan:", error);
+      setGenerationError(
+        error instanceof Error
+          ? error.message
+          : "Der Lernplan konnte gerade nicht erstellt werden."
+      );
     } finally {
       setLoading(false);
     }
@@ -133,6 +180,8 @@ function App() {
     );
 
     try {
+      console.log("Chat request URL:", getApiUrl("/chat"));
+
       const response = await fetch(getApiUrl("/chat"), {
         method: "POST",
         headers: {
@@ -148,11 +197,7 @@ function App() {
         }),
       });
 
-      const result = await response.json();
-
-      if (!response.ok) {
-        throw new Error(result?.error || "Chat request failed");
-      }
+      const result = await parseApiResponse(response, getApiUrl("/chat"));
 
       const assistantReply =
         typeof result?.reply === "string" && result.reply.trim()
@@ -217,7 +262,11 @@ function App() {
       {currentPage === "intro" && <IntroPage onStart={goToQuestions} />}
 
       {(currentPage === "questions" || (currentPage === "quests" && loading)) && (
-        <QuestionsPage onGenerate={handleGenerate} isGenerating={loading} />
+        <QuestionsPage
+          onGenerate={handleGenerate}
+          isGenerating={loading}
+          errorMessage={generationError}
+        />
       )}
 
       {currentPage === "quests" && !loading && (
